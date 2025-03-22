@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS user_app_data(
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(200) NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+    roles TEXT[] NOT NULL
+);

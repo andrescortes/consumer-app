@@ -1,0 +1,27 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### POST login
+POST http://localhost:9000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test@gmail.com",
+  "password": "123456789"
+}
+
+### POST signup
+POST http://localhost:9000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test@gmail.com",
+  "password": "123456789",
+  "enabled": true,
+  "roles": ["ROLE_USER"]
+}
+
+### GET Chracters
+GET http://localhost:9000/api/v1/characters
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE3NDI2MDI1NDMsImV4cCI6MTc0MjYzMTM0M30.-OBuKp8tKY1IGHrzMB_FbeMpguKH0O47dtqxsgJACPh0lKd_CAMPuF3Jc02gxLDZ

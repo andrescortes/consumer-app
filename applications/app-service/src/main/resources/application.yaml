@@ -52,3 +52,24 @@ resilience4j:
         waitDurationInOpenState: "10s"
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
+adapters:
+  r2dbc:
+    host: "${DB_HOST:localhost}"
+    port: "${DB_PORT:5432}"
+    database: "${DB_NAME:consumer_app_db}"
+    schema: "${DB_SCHEMA:public}"
+    username: "${DB_USERNAME:postgres}"
+    password: "${DB_PASSWORD:postgres}"
+
+jwt:
+  secret: "${JWT_SECRET:ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave64ByteLength}"
+  expiration: "${JWT_EXPIRATION:28800}"
+  password:
+    encoder:
+      secret: "${JWT_ENCODER_SECRET:ruqwoierowrropqwirpoiwrwripworipwer}"
+      iteration: 33
+      keyLength: 256
+logging:
+  level:
+    web: debug
+    org.springframework.security: debug
