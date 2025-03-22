@@ -1,6 +1,6 @@
 package co.com.consumer.api.security;
 
-import co.com.consumer.api.security.Jwt.JWTUtil;
+import co.com.consumer.api.security.jwt.JWTUtil;
 import co.com.consumer.api.security.dto.AuthRequest;
 import co.com.consumer.api.security.dto.AuthResponse;
 import co.com.consumer.api.security.dto.UserAppDto;

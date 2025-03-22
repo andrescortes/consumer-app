@@ -1,4 +1,4 @@
-package co.com.consumer.api.security.Jwt;
+package co.com.consumer.api.security.jwt;
 
 import co.com.consumer.model.exceptions.JWTException;
 import co.com.consumer.model.userapp.UserApp;

@@ -1,6 +1,6 @@
 package co.com.consumer.api.security.conf;
 
-import co.com.consumer.api.security.Jwt.JWTAuthenticationManager;
+import co.com.consumer.api.security.jwt.JWTAuthenticationManager;
 import co.com.consumer.model.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
