@@ -44,11 +44,10 @@ public class JWTUtil {
 
     public Claims getAllClaimsFromToken(String token) {
         try {
-            log.info("validating token {}", token);
+            log.info("Validating token");
             return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException |
                  IllegalArgumentException e) {
-            log.error(e.getMessage());
             throw new JWTException(e.getMessage());
         }
     }
@@ -88,10 +87,8 @@ public class JWTUtil {
         return (extractUsername.equals(username) && !isTokenExpired(token));
     }
 
-
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
-
 }
