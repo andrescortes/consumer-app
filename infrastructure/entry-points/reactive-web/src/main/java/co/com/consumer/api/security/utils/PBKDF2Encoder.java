@@ -44,9 +44,4 @@ public class PBKDF2Encoder implements PasswordEncoder {
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         return encode(rawPassword).equals(encodedPassword);
     }
-
-    @Override
-    public boolean upgradeEncoding(String encodedPassword) {
-        return PasswordEncoder.super.upgradeEncoding(encodedPassword);
-    }
 }
