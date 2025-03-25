@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,5 +19,5 @@ public class UserApp {
     private String username;
     private String password;
     private Boolean enabled;
-    private List<Role> roles;
+    private Set<Role> roles;
 }

@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ToString
@@ -37,7 +37,7 @@ public class UserAppData implements UserDetails {
     private Boolean enabled;
     @Getter
     @Setter
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @Override
     public String getUsername() {

@@ -1,7 +1,6 @@
 package co.com.consumer.api.security.mapper;
 
 import co.com.consumer.api.security.dto.UserAppData;
-import co.com.consumer.api.security.dto.UserAppDto;
 import co.com.consumer.model.userapp.UserApp;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,9 +18,5 @@ public class UserAppMapper {
 
     public UserAppData toData(UserApp userApp) {
         return modelMapper.map(userApp, UserAppData.class);
-    }
-
-    public UserAppData toData(UserAppDto dto) {
-        return modelMapper.map(dto, UserAppData.class);
     }
 }

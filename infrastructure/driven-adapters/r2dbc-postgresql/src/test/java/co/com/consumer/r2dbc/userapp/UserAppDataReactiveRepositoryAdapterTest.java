@@ -2,7 +2,6 @@ package co.com.consumer.r2dbc.userapp;
 
 import co.com.consumer.model.userapp.Role;
 import co.com.consumer.model.userapp.UserApp;
-import co.com.consumer.r2dbc.userapp.dto.RoleData;
 import co.com.consumer.r2dbc.userapp.dto.UserAppData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,13 +40,13 @@ class UserAppDataReactiveRepositoryAdapterTest {
                 .id(1L)
                 .username("test")
                 .password("test")
-                .roles(Collections.singletonList(RoleData.ROLE_USER))
+                .roles(Collections.singleton(Role.ROLE_USER))
                 .build();
         userApp = UserApp.builder()
                 .id(1L)
                 .username("test")
                 .password("test")
-                .roles(Collections.singletonList(Role.ROLE_USER))
+                .roles(Collections.singleton(Role.ROLE_USER))
                 .build();
 
     }
@@ -59,8 +58,8 @@ class UserAppDataReactiveRepositoryAdapterTest {
 
         adapter.byUsername("username")
                 .as(StepVerifier::create)
-                .expectNextMatches(user-> user.getUsername().equals("test")
-                && user.getPassword().equals("test"))
+                .expectNextMatches(user -> user.getUsername().equals("test")
+                        && user.getPassword().equals("test"))
                 .verifyComplete();
     }
 
@@ -83,21 +82,5 @@ class UserAppDataReactiveRepositoryAdapterTest {
                 .as(StepVerifier::create)
                 .expectNextMatches(user -> user.getUsername().equals("test"))
                 .verifyComplete();
-    }
-
-    @Test
-    void updateUser() {
-    }
-
-    @Test
-    void deleteUser() {
-//        Mockito.when(repository.findUserAppDataByUsername(anyString())).thenReturn(Mono.just(userAppData));
-//        Mockito.when(objectMapper.mapBuilder(any(), any())).thenReturn(userApp.toBuilder());
-//        Mockito.when(objectMapper.mapBuilder(any(), any())).thenReturn(userAppData.toBuilder());
-//        Mockito.when(repository.delete(any())).thenReturn(Mono.empty());
-//
-//        adapter.deleteUser("username")
-//                .as(StepVerifier::create)
-//                .verifyComplete();
     }
 }

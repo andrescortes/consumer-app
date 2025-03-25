@@ -35,6 +35,7 @@ public class UserAppDataReactiveRepositoryAdapter extends ReactiveAdapterOperati
                         user.toBuilder()
                                 .username(username)
                                 .password(userApp.getPassword())
+                                .roles(userApp.getRoles())
                                 .build()
                 ).flatMap(user -> repository.save(super.toData(user)))
                 .map(super::toEntity);

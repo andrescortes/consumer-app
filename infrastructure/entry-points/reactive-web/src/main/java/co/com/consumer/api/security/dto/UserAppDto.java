@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -20,5 +20,5 @@ public class UserAppDto {
     private String username;
     private String password;
     private Boolean enabled;
-    private List<String> roles;
+    private Set<String> roles;
 }

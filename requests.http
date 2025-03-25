@@ -11,6 +11,15 @@ Content-Type: application/json
   "password": "123456789"
 }
 
+### POST login
+POST http://localhost:9000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test2@gmail.com",
+  "password": "123456789"
+}
+
 ### POST signup
 POST http://localhost:9000/api/v1/auth/signup
 Content-Type: application/json
@@ -22,6 +31,43 @@ Content-Type: application/json
   "roles": ["ROLE_USER"]
 }
 
+### POST signup
+POST http://localhost:9000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test2@gmail.com",
+  "password": "123456789",
+  "enabled": true,
+  "roles": ["ROLE_USER"]
+}
+
 ### GET Chracters
 GET http://localhost:9000/api/v1/characters
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE3NDI2MDI1NDMsImV4cCI6MTc0MjYzMTM0M30.-OBuKp8tKY1IGHrzMB_FbeMpguKH0O47dtqxsgJACPh0lKd_CAMPuF3Jc02gxLDZ
+Authorization: Bearer test
+
+### POST Add permissions
+POST http://localhost:9000/api/v1/auth/add-permissions
+Content-Type: application/json
+Authorization: Bearer test
+
+{
+  "username": "test2@gmail.com",
+  "permissions": [
+    "ROLE_GUEST",
+    "ROLE_ADMIN"
+  ]
+}
+
+### POST Add permissions
+POST http://localhost:9000/api/v1/auth/remove-permissions
+Content-Type: application/json
+Authorization: Bearer test
+
+{
+  "username": "test2@gmail.com",
+  "permissions": [
+    "ROLE_GUEST",
+    "ROLE_ADMIN"
+  ]
+}

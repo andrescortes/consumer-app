@@ -1,6 +1,7 @@
 package co.com.consumer.api.security.conf;
 
 import co.com.consumer.api.security.jwt.JWTAuthenticationManager;
+import co.com.consumer.model.userapp.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,12 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
+
+import static co.com.consumer.api.commons.Constants.AUTH_ADD_PERMISSIONS;
+import static co.com.consumer.api.commons.Constants.AUTH_LOGIN;
+import static co.com.consumer.api.commons.Constants.AUTH_REMOVE_PERMISSIONS;
+import static co.com.consumer.api.commons.Constants.AUTH_SIGNUP;
+import static co.com.consumer.api.commons.Constants.CHARACTERS;
 
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
@@ -47,8 +54,9 @@ public class WebSecurityConf {
                         .securityContextRepository(securityContextRepository)
                         .authorizeExchange(authorizeExchangeSpec ->
                                 authorizeExchangeSpec
-                                        .pathMatchers(HttpMethod.POST, "/auth/signup", "/auth/login").permitAll()
-                                        .pathMatchers(HttpMethod.GET, "/characters").hasAnyRole("USER")
+                                        .pathMatchers(HttpMethod.POST, AUTH_SIGNUP, AUTH_LOGIN).permitAll()
+                                        .pathMatchers(HttpMethod.POST, AUTH_ADD_PERMISSIONS, AUTH_REMOVE_PERMISSIONS).hasRole(Role.ROLE_ADMIN.name().substring(5))
+                                        .pathMatchers(HttpMethod.GET, CHARACTERS).hasRole(Role.ROLE_USER.name().substring(5))
                                         .anyExchange()
                                         .authenticated()
                         )
