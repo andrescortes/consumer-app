@@ -37,7 +37,7 @@ Content-Type: application/json
 
 {
   "username": "test2@gmail.com",
-  "password": "123456789",
+  "password": "1234567890",
   "enabled": true,
   "roles": ["ROLE_USER"]
 }

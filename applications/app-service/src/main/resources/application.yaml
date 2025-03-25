@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: ${SERVER_PORT:9000}
 spring:
   application:
     name: "ConsumerApp"
@@ -51,7 +51,7 @@ resilience4j:
         minimumNumberOfCalls: 10
         waitDurationInOpenState: "10s"
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:8080}"
 adapters:
   r2dbc:
     host: "${DB_HOST:localhost}"
@@ -67,8 +67,8 @@ jwt:
   password:
     encoder:
       secret: "${JWT_ENCODER_SECRET:ruqwoierowrropqwirpoiwrwripworipwer}"
-      iteration: 33
-      keyLength: 256
+      iteration: "${JWT_ENCODER_ITERATION:33}"
+      keyLength: "${JWT_ENCODER_KEY_LENGTH:256}"
 logging:
   level:
     web: debug
