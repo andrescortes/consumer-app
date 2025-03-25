@@ -1,0 +1,73 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### POST login
+POST http://localhost:9000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test@gmail.com",
+  "password": "123456789"
+}
+
+### POST login
+POST http://localhost:9000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test2@gmail.com",
+  "password": "123456789"
+}
+
+### POST signup
+POST http://localhost:9000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test@gmail.com",
+  "password": "123456789",
+  "enabled": true,
+  "roles": ["ROLE_USER"]
+}
+
+### POST signup
+POST http://localhost:9000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test2@gmail.com",
+  "password": "123456789",
+  "enabled": true,
+  "roles": ["ROLE_USER"]
+}
+
+### GET Chracters
+GET http://localhost:9000/api/v1/characters
+Authorization: Bearer test
+
+### POST Add permissions
+POST http://localhost:9000/api/v1/auth/add-permissions
+Content-Type: application/json
+Authorization: Bearer test
+
+{
+  "username": "test2@gmail.com",
+  "permissions": [
+    "ROLE_GUEST",
+    "ROLE_ADMIN"
+  ]
+}
+
+### POST Add permissions
+POST http://localhost:9000/api/v1/auth/remove-permissions
+Content-Type: application/json
+Authorization: Bearer test
+
+{
+  "username": "test2@gmail.com",
+  "permissions": [
+    "ROLE_GUEST",
+    "ROLE_ADMIN"
+  ]
+}

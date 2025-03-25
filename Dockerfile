@@ -4,7 +4,7 @@ COPY build.gradle main.gradle settings.gradle gradle.properties lombok.config ./
 COPY applications ./applications
 COPY domain ./domain
 COPY infrastructure ./infrastructure
-RUN gradle bootJar --no-daemon -x test --info --stacktrace
+RUN gradle bootJar --no-daemon --info --stacktrace
 
 FROM eclipse-temurin:17-jdk-alpine
 ENV APP_HOME=/usr/app
