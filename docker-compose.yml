@@ -6,3 +6,35 @@ services:
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=consumer_app_db
+      - DB_SCHEMA=public
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=consumer_app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - postgres-db:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres-db:
+
+networks:
+  app-network:

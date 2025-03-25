@@ -54,13 +54,14 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
         int statusCode = Integer.parseInt(Objects.toString(errorAttributes.get("status")));
         HttpStatus status = HttpStatus.resolve(statusCode);
         assert status != null;
+        String[] exceptions = errorAttributes.get("exception").toString().split("\\.");
         Map<String, Object> response = Map.of(
                 "status", status.value(),
                 "timestamp", LocalDateTime.now(),
                 "message", message,
                 "errors", List.of(
                         errorAttributes.get("error").toString(),
-                        errorAttributes.get("exception").toString()
+                        exceptions[exceptions.length - 1]
                 ));
         return ServerResponse
                 .status(status)
