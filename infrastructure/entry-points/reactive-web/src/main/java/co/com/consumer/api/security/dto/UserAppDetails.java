@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserAppData implements UserDetails {
+public class UserAppDetails implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -1,8 +1,9 @@
 package co.com.consumer.api.security;
 
 import co.com.consumer.api.security.dto.AuthPermissionRequest;
-import co.com.consumer.api.security.dto.AuthRequest;
-import co.com.consumer.api.security.dto.AuthResponse;
+import co.com.consumer.api.security.dto.LoginRequest;
+import co.com.consumer.api.security.dto.RefreshTokenRequest;
+import co.com.consumer.api.security.dto.TokenResponse;
 import co.com.consumer.api.security.dto.UserAppDto;
 import co.com.consumer.api.security.jwt.JWTUtil;
 import co.com.consumer.api.security.mapper.UserAppMapper;
@@ -33,21 +34,24 @@ public class AuthHandler {
     private final UserAppMapper userAppMapper;
 
     public Mono<ServerResponse> login(ServerRequest request) {
-        return request.bodyToMono(AuthRequest.class)
+        return request.bodyToMono(LoginRequest.class)
                 .flatMap(this::processRequestLogin)
-                .flatMap(authResponse -> ServerResponse
+                .flatMap(tokenResponse -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(authResponse)
+                        .bodyValue(tokenResponse)
                 );
     }
 
-    private Mono<AuthResponse> processRequestLogin(AuthRequest auth) {
+    private Mono<TokenResponse> processRequestLogin(LoginRequest auth) {
         return userAppUseCase
                 .getUserApp(auth.getUsername())
-                .map(userAppMapper::toData)
+                .map(userAppMapper::toDetails)
                 .filter(userDetails -> passwordEncoder.encode(auth.getPassword()).equals(userDetails.getPassword()))
-                .map(userApp -> new AuthResponse(jwtUtil.generateToken(userAppMapper.toEntity(userApp))))
+                .map(userApp -> {
+                    UserApp user = userAppMapper.toEntity(userApp);
+                    return new TokenResponse(jwtUtil.generateAccessToken(user), jwtUtil.generateRefreshToken(user));
+                })
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new IllegalArgumentException("Invalid username or password"))));
     }
 
@@ -86,7 +90,7 @@ public class AuthHandler {
 
     private Mono<String> processRequestAddOrRemovePermission(AuthPermissionRequest permission, boolean addPermission) {
         return userAppUseCase.getUserApp(permission.getUsername())
-                .map(userAppMapper::toData)
+                .map(userAppMapper::toDetails)
                 .flatMap(userAppData -> {
                     if (permission.getPermissions().isEmpty()) {
                         return Mono.just("There are no permissions to perform this action");
@@ -121,5 +125,22 @@ public class AuthHandler {
                         .ok()
                         .bodyValue(message)
                 );
+    }
+
+    public Mono<ServerResponse> refreshToken(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(RefreshTokenRequest.class)
+                .flatMap(request -> processRefreshToken(request)
+                        .flatMap(accessToken -> ServerResponse
+                                .ok()
+                                .bodyValue(new TokenResponse(accessToken, request.getRefreshToken()))
+                        ));
+    }
+
+    private Mono<String> processRefreshToken(RefreshTokenRequest request) {
+        return Mono.fromCallable(() -> jwtUtil.extractUsername(request.getRefreshToken()))
+                .flatMap(username -> userAppUseCase
+                        .getUserApp(username)
+                        .map(userAppMapper::toDetails))
+                .map(userDetails -> jwtUtil.generateAccessToken(userAppMapper.toEntity(userDetails)));
     }
 }

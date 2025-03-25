@@ -64,6 +64,7 @@ adapters:
 jwt:
   secret: "${JWT_SECRET:ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave64ByteLength}"
   expiration: "${JWT_EXPIRATION:28800}"
+  expirationAccess: "${JWT_EXPIRATION_ACCESS:875}"
   password:
     encoder:
       secret: "${JWT_ENCODER_SECRET:ruqwoierowrropqwirpoiwrwripworipwer}"

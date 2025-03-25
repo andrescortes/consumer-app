@@ -44,7 +44,7 @@ Content-Type: application/json
 
 ### GET Chracters
 GET http://localhost:9000/api/v1/characters
-Authorization: Bearer test
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNzQyOTEyODIyLCJleHAiOjE3NDI5MTM2OTd9.NA6l1KlHfcJiM6J3IBE6-92DQWY-P-d7oDlvk4tai0kaRFttT3jIhHiRBdw7iN-v
 
 ### POST Add permissions
 POST http://localhost:9000/api/v1/auth/add-permissions
