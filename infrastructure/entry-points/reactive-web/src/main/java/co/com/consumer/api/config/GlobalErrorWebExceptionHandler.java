@@ -1,5 +1,6 @@
 package co.com.consumer.api.config;
 
+import co.com.consumer.model.exceptions.JWTException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
@@ -52,6 +53,9 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
         }
         assert message != null;
         int statusCode = Integer.parseInt(Objects.toString(errorAttributes.get("status")));
+        if(error instanceof JWTException exception) {
+            statusCode = exception.getCode();
+        }
         HttpStatus status = HttpStatus.resolve(statusCode);
         assert status != null;
         String[] exceptions = errorAttributes.get("exception").toString().split("\\.");

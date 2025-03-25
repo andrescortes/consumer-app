@@ -1,7 +1,12 @@
 package co.com.consumer.model.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class JWTException extends RuntimeException {
-    public JWTException(String message) {
+    private final int code;
+    public JWTException(String message, int code) {
         super(message);
+        this.code = code;
     }
 }

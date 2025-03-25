@@ -6,13 +6,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecureDigestAlgorithm;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -28,12 +31,14 @@ import static co.com.consumer.model.utils.AppConstants.ROLES;
 public class JWTUtil {
 
     private final String secret;
-    private final String expiration;
+    private final String expirationRefresh;
+    private final String expirationAccessToken;
     private SecretKey secretKey;
 
-    public JWTUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") String expiration) {
+    public JWTUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") String expirationRefresh,@Value("${jwt.expirationAccess}") String expirationAccessToken) {
         this.secret = secret;
-        this.expiration = expiration;
+        this.expirationRefresh = expirationRefresh;
+        this.expirationAccessToken = expirationAccessToken;
     }
 
     @PostConstruct
@@ -48,7 +53,7 @@ public class JWTUtil {
             return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException |
                  IllegalArgumentException e) {
-            throw new JWTException(e.getMessage());
+            throw new JWTException(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
         }
     }
 
@@ -64,15 +69,23 @@ public class JWTUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserApp user) {
+    public String generateRefreshToken(UserApp user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(ROLES, user.getRoles());
-        return createToken(claims, user.getUsername());
+        int timeInHours = Integer.parseInt(expirationRefresh);
+        return createToken(claims, user.getUsername(), timeInHours);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    public String generateAccessToken(UserApp user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(ROLES, user.getRoles());
+        int timeInMinutes = Integer.parseInt(expirationAccessToken);
+        return createToken(claims, user.getUsername(), timeInMinutes);
+    }
+
+    private String createToken(Map<String, Object> claims, String subject, int timeLongDays) {
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + Integer.parseInt(expiration) * 1000L);
+        final Date expirationDate = new Date(createdDate.getTime() + timeLongDays * 1000L);
         return Jwts.builder()
                 .claims(claims)
                 .subject(subject)
