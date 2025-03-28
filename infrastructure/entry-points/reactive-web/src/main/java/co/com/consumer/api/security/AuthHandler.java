@@ -3,6 +3,7 @@ package co.com.consumer.api.security;
 import co.com.consumer.api.security.dto.AuthPermissionRequest;
 import co.com.consumer.api.security.dto.LoginRequest;
 import co.com.consumer.api.security.dto.RefreshTokenRequest;
+import co.com.consumer.api.security.dto.ApiResponse;
 import co.com.consumer.api.security.dto.TokenResponse;
 import co.com.consumer.api.security.dto.UserAppDto;
 import co.com.consumer.api.security.jwt.JWTUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,13 +63,13 @@ public class AuthHandler {
                 .bodyToMono(UserAppDto.class)
                 .flatMap(this::processRequestSignup)
                 .flatMap(message -> ServerResponse
-                        .ok()
-                        .contentType(MediaType.TEXT_PLAIN)
+                        .created(URI.create("/signup"))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(message)
                 );
     }
 
-    private Mono<String> processRequestSignup(UserAppDto dto) {
+    private Mono<ApiResponse> processRequestSignup(UserAppDto dto) {
         UserApp user = UserApp.builder()
                 .username(dto.getUsername())
                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -76,7 +78,7 @@ public class AuthHandler {
                 .build();
         return userAppUseCase
                 .saveUserApp(user)
-                .then(Mono.just("User signed up successfully"));
+                .then(Mono.just(new ApiResponse("User created successfully")));
     }
 
     public Mono<ServerResponse> addPermission(ServerRequest serverRequest) {
@@ -84,23 +86,24 @@ public class AuthHandler {
                 .flatMap(authPermissionRequest -> processRequestAddOrRemovePermission(authPermissionRequest, true))
                 .flatMap(message -> ServerResponse
                         .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(message)
                 );
     }
 
-    private Mono<String> processRequestAddOrRemovePermission(AuthPermissionRequest permission, boolean addPermission) {
+    private Mono<ApiResponse> processRequestAddOrRemovePermission(AuthPermissionRequest permission, boolean addPermission) {
         return userAppUseCase.getUserApp(permission.getUsername())
                 .map(userAppMapper::toDetails)
                 .flatMap(userAppData -> {
                     if (permission.getPermissions().isEmpty()) {
-                        return Mono.just("There are no permissions to perform this action");
+                        return Mono.just(new ApiResponse("Permissions not allowed to perform this action"));
                     }
                     Set<String> rolesAllowed = Arrays.stream(Role.values())
                             .map(Enum::name)
                             .filter(role -> permission.getPermissions().contains(role))
                             .collect(Collectors.toSet());
                     if (rolesAllowed.isEmpty()) {
-                        return Mono.just("Roles not allowed to perform this action");
+                        return Mono.just(new ApiResponse("Roles not allowed to perform this action"));
                     }
                     Set<Role> roles = rolesAllowed
                             .stream()
@@ -113,7 +116,7 @@ public class AuthHandler {
                         userAppData.getRoles().removeAll(roles);
                     }
                     return userAppUseCase.updateUserApp(userAppData.getUsername(), userAppMapper.toEntity(userAppData))
-                            .then(Mono.just("Operation completed successfully"));
+                            .then(Mono.just(new ApiResponse("Operation completed successfully")));
                 });
     }
 
@@ -123,6 +126,7 @@ public class AuthHandler {
                 .flatMap(request -> processRequestAddOrRemovePermission(request, false))
                 .flatMap(message -> ServerResponse
                         .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(message)
                 );
     }

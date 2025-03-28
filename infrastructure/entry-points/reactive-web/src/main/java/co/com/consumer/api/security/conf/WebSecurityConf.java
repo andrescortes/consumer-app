@@ -54,6 +54,7 @@ public class WebSecurityConf {
                         .securityContextRepository(securityContextRepository)
                         .authorizeExchange(authorizeExchangeSpec ->
                                 authorizeExchangeSpec
+                                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                         .pathMatchers(HttpMethod.POST, AUTH_SIGNUP, AUTH_LOGIN).permitAll()
                                         .pathMatchers(HttpMethod.POST, AUTH_ADD_PERMISSIONS, AUTH_REMOVE_PERMISSIONS).hasRole(Role.ROLE_ADMIN.name().substring(5))
                                         .anyExchange()
