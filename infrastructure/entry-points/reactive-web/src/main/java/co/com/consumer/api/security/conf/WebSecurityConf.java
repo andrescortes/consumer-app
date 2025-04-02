@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -18,7 +17,6 @@ import static co.com.consumer.api.commons.Constants.AUTH_ADD_PERMISSIONS;
 import static co.com.consumer.api.commons.Constants.AUTH_LOGIN;
 import static co.com.consumer.api.commons.Constants.AUTH_REMOVE_PERMISSIONS;
 import static co.com.consumer.api.commons.Constants.AUTH_SIGNUP;
-import static co.com.consumer.api.commons.Constants.CHARACTERS;
 
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
