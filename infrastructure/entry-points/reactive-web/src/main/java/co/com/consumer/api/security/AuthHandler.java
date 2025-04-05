@@ -9,6 +9,7 @@ import co.com.consumer.api.security.dto.UserAppDto;
 import co.com.consumer.api.security.jwt.JWTUtil;
 import co.com.consumer.api.security.mapper.UserAppMapper;
 import co.com.consumer.api.security.utils.PBKDF2Encoder;
+import co.com.consumer.model.exceptions.InvalidCredential;
 import co.com.consumer.model.userapp.Role;
 import co.com.consumer.model.userapp.UserApp;
 import co.com.consumer.usecase.userapp.UserAppUseCase;
@@ -54,7 +55,7 @@ public class AuthHandler {
                     UserApp user = userAppMapper.toEntity(userApp);
                     return new TokenResponse(jwtUtil.generateAccessToken(user), jwtUtil.generateRefreshToken(user));
                 })
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new IllegalArgumentException("Invalid username or password"))));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new InvalidCredential("Invalid username or password", 400))));
     }
 
     public Mono<ServerResponse> signup(ServerRequest request) {

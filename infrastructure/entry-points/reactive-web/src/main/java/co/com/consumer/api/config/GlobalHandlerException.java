@@ -1,6 +1,7 @@
 package co.com.consumer.api.config;
 
 import co.com.consumer.api.commons.dto.ApiErrorResponse;
+import co.com.consumer.model.exceptions.InvalidCredential;
 import co.com.consumer.model.exceptions.JWTException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,21 @@ public class GlobalHandlerException {
                         .traces(getClassesName(ex.getStackTrace()))
                         .timestamp(LocalDateTime.now())
                         .build());
+    }
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidCredential(InvalidCredential ex) {
+        log.error(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        ApiErrorResponse.builder()
+                                .message(ex.getMessage())
+                                .code(ex.getCode())
+                                .traces(getClassesName(ex.getStackTrace()))
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                );
     }
 
     @ExceptionHandler(Exception.class)
